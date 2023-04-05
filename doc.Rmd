@@ -1,0 +1,58 @@
+---
+title: "NSERC PGS/CGS-D Statistics" 
+output: github_document
+---
+
+```{r include = FALSE}
+knitr::opts_chunk$set(echo=FALSE, message = FALSE)
+```
+
+```{r read data, warnings = FALSE}
+library(ggplot2)
+library(readr)
+
+data <- read_csv("data.csv")
+```
+
+This document contains some very light exploratory analysis on the data. There really is not much to analyze here, but if someone has better ideas (or greater reach) than I do, my hope if that you find this data somewhat useful. Starting with some extra low-hanging fruit...
+
+```{r, }
+data |> ggplot(aes(x = Year, y = CPIFactor2022*35000)) + geom_line() + theme_light() + 
+  ylab("CGS Award Value (in 2022 CAD)")
+```
+
+Success rates of applications took a steep decline around 2011-2012 from ~60% to ~40%, and have stayed here ever since. Today, my personal perspective is that the award is highly selective and prestigious, though this appears to not always have been the case. 
+
+```{r}
+data |> ggplot(aes(x = Year, y = SuccessRateTotal)) + geom_line() + theme_light() + 
+  ylab("Success Rate, PGS/CGS Combined") 
+```
+
+There has been a proportional increase in the number of CGS awards compared to PGS (which actually is good for retention, as the CGS needs to be held at a Canadian institution, unlike the PGS). Despite this, the increased selectivity and decreased real value means that the total award value per applicant ("expected" award value for an average applicant, if you will) has decreased sharply since 2003. 
+
+```{r}
+data |> ggplot(aes(x = Year, y = AppCorrected)) + geom_line() + theme_light() + 
+  ylab("Total Award Value per Applicant (in 2022 CAD)") 
+```
+
+Is the increased selectivity due to increased demand? Recall that NSERC sets its own quota for each university, and so the number of applications they review is largely set by themselves. Nonetheless, there has been a moderate increase throughout the years.  
+
+```{r}
+data |> ggplot(aes(x = Year, y = ApplicationsFwd)) + geom_line() + theme_light() + 
+  ylab("Applications Reviewed by NSERC") 
+```
+
+Is there underlying demand being suppressed by the quota? This is unlikely, as least at UBC, where the number of domestic PhDs who would be eligible for the award actually saw steady decline in the 2010's. Being a domestic PhD student in the highest CoL region in the country, I am not entirely surprised. 
+
+```{r}
+data |> ggplot(aes(x = Year, y = UBCPhDDomestic)) + geom_line() + theme_light() + 
+  ylab("UBC Domestic PhD Enrolment") 
+```
+
+This decrease in enrolment means that it is actually possible to draw a plot that makes it look like the expected (real) value of the PGS/CGS program actually increased during the 2010s for UBC's domestic PhDs. Nice job!
+
+```{r}
+data |> ggplot(aes(x = Year, y = EnrolCorrected)) + geom_line() + theme_light() + 
+  ylab("Total Award Value per Domestic Enrolment (in 2022 CAD)") 
+```
+
